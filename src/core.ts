@@ -12,8 +12,9 @@ async function getFileContents(branch: string, owner: string, repo: string, file
     try {
         const body = {owner, repo, ref: branch, path: filepath}
         info(`👉 ${JSON.stringify(body, null, 2)}`);
-        const {data} = await octokit.rest.repos.getContent(body);
-        return data;
+        const res = await octokit.rest.repos.getContent(body);
+        info(`👉 res=${JSON.stringify(res, null, 2)}`)
+        return res?.data;
     } catch (err) {
         warning(`👉 Get File Contents: ${err instanceof Error ? err.message : err}`);
         return;
