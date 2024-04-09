@@ -3,6 +3,12 @@ import * as core from "@actions/core";
 
 export interface Inputs {
     debug?: boolean;
+    file?: string;
+    owner?: string;
+    repo?: string;
+    branch?: string;
+    token?: string;
+    outkey?: string;
 }
 
 export interface Outputs {
@@ -11,7 +17,12 @@ export interface Outputs {
 }
 
 let getInput = (): Inputs => ({
-    debug: core.getInput('debug') === 'true'
+    debug: core.getInput('debug') === 'true',
+    file: core.getInput('file', {required: false}),
+    owner: core.getInput('owner', {required: false}),
+    repo: core.getInput('repo', {required: false}),
+    branch: core.getInput('branch', {required: false}),
+    outkey: core.getInput('outkey', {required: false}),
 })
 
 let handleOutput = (output: Outputs = {}) => {
@@ -25,9 +36,10 @@ export function debugPrintf(...args: any) {
     }
 }
 
-try {
-    handleOutput(run(getInput()))
-} catch (error: any) {
-    core.setFailed(error?.message);
-}
-
+(async () => {
+    try {
+        handleOutput((await run(getInput())))
+    } catch (error: any) {
+        core.setFailed(error?.message);
+    }
+})();
