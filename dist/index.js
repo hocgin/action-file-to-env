@@ -51,8 +51,9 @@ function getFileContents(branch, owner, repo, filepath) {
         try {
             const body = { owner, repo, ref: branch, path: filepath };
             (0, core_1.info)(`👉 ${JSON.stringify(body, null, 2)}`);
-            const { data } = yield octokit.rest.repos.getContent(body);
-            return data;
+            const res = yield octokit.rest.repos.getContent(body);
+            (0, core_1.info)(`👉 res=${JSON.stringify(res, null, 2)}`);
+            return res === null || res === void 0 ? void 0 : res.data;
         }
         catch (err) {
             (0, core_1.warning)(`👉 Get File Contents: ${err instanceof Error ? err.message : err}`);
