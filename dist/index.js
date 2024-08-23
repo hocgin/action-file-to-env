@@ -99,6 +99,8 @@ function run(input) {
             const absPath = path_1.default.join(baseDir, path_1.default.dirname(file), path_1.default.basename(file));
             if (!fs_1.default.existsSync(absPath)) {
                 (0, core_1.warning)(`not found file. baseDir = ${baseDir}, absPath = ${absPath}`);
+                (0, core_1.info)(`baseDir files = ${fs_1.default.readdirSync(baseDir)}`);
+                (0, core_1.info)(`relative files = ${fs_1.default.readdirSync(path_1.default.relative(".", file))}`);
             }
             else {
                 fileContent = fs_1.default.readFileSync(absPath).toString();
