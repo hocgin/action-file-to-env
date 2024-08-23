@@ -98,7 +98,7 @@ function run(input) {
             let baseDir = process.cwd();
             const absPath = path_1.default.join(baseDir, path_1.default.dirname(file), path_1.default.basename(file));
             if (!fs_1.default.existsSync(absPath)) {
-                (0, core_1.warning)(`not found file. absPath = ${absPath}`);
+                (0, core_1.warning)(`not found file. baseDir = ${baseDir}, absPath = ${absPath}`);
             }
             else {
                 fileContent = fs_1.default.readFileSync(absPath).toString();
