@@ -95,12 +95,12 @@ function run(input) {
         let file = (_b = input === null || input === void 0 ? void 0 : input.file) === null || _b === void 0 ? void 0 : _b.trim();
         file = (file === null || file === void 0 ? void 0 : file.length) ? file : ".github/workflows/file.txt";
         if ((input === null || input === void 0 ? void 0 : input.type) === 'local') {
-            let baseDir = process.cwd();
+            let baseDir = __dirname;
             const absPath = path_1.default.join(baseDir, path_1.default.dirname(file), path_1.default.basename(file));
             if (!fs_1.default.existsSync(absPath)) {
-                (0, core_1.warning)(`not found file. baseDir = ${baseDir}, absPath = ${absPath}`);
+                (0, core_1.warning)(`not found file. baseDir = ${baseDir}, absPath = ${absPath}, __dirname = ${__dirname}`);
                 (0, core_1.info)(`baseDir files = ${fs_1.default.readdirSync(baseDir)}`);
-                (0, core_1.info)(`relative files = ${fs_1.default.readdirSync(path_1.default.relative(".", file))}`);
+                (0, core_1.info)(`relative files = ${fs_1.default.readdirSync(path_1.default.relative(__dirname, file))}`);
             }
             else {
                 fileContent = fs_1.default.readFileSync(absPath).toString();
