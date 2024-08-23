@@ -7,13 +7,7 @@ import * as process from "node:process";
 
 
 // @ts-ignore
-const octokit = (()=>{
-    let token = process.env.GITHUB_TOKEN;
-    if (!token) {
-        return undefined;
-    }
-    return github.getOctokit(token);
-})();
+let octokit;
 // @ts-ignore
 const tag = (prefix: string) => `${prefix.padEnd(9)} |`
 
@@ -70,6 +64,7 @@ export async function run(input: Inputs): Promise<Outputs> {
     }
     // github resp
     else {
+        octokit = github.getOctokit(process.env.GITHUB_TOKEN);
         const crepo = github.context.repo;
 
         let owner: string = input?.owner?.trim() ?? crepo.owner;
