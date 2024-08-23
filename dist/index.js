@@ -49,13 +49,7 @@ const path_1 = __importDefault(__nccwpck_require__(1017));
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 const process = __importStar(__nccwpck_require__(7742));
 // @ts-ignore
-const octokit = (() => {
-    let token = process.env.GITHUB_TOKEN;
-    if (!token) {
-        return undefined;
-    }
-    return github.getOctokit(token);
-})();
+let octokit;
 // @ts-ignore
 const tag = (prefix) => `${prefix.padEnd(9)} |`;
 function getFileContents(branch, owner, repo, filepath) {
@@ -115,6 +109,7 @@ function run(input) {
         }
         // github resp
         else {
+            octokit = github.getOctokit(process.env.GITHUB_TOKEN);
             const crepo = github.context.repo;
             let owner = (_d = (_c = input === null || input === void 0 ? void 0 : input.owner) === null || _c === void 0 ? void 0 : _c.trim()) !== null && _d !== void 0 ? _d : crepo.owner;
             owner = (owner === null || owner === void 0 ? void 0 : owner.length) ? owner : crepo.owner;
