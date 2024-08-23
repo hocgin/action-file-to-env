@@ -54,7 +54,7 @@ export async function run(input: Inputs): Promise<Outputs> {
         let baseDir = process.cwd();
         const absPath = path.join(baseDir, path.dirname(file), path.basename(file));
         if (!fs.existsSync(absPath)) {
-            warning(`not found file. absPath = ${absPath}`)
+            warning(`not found file. baseDir = ${baseDir}, absPath = ${absPath}`)
         }else  {
             fileContent = fs.readFileSync(absPath).toString();
         }
