@@ -6,7 +6,13 @@ import fs from 'fs';
 
 
 // @ts-ignore
-const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+const octokit = (()=>{
+    let token = process.env.GITHUB_TOKEN;
+    if (!token) {
+        return undefined;
+    }
+    return github.getOctokit(token);
+})();
 // @ts-ignore
 const tag = (prefix: string) => `${prefix.padEnd(9)} |`
 
