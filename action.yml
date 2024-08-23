@@ -5,9 +5,18 @@ inputs:
   debug:
     required: false
     description: 'debug mode'
+  type:
+    required: false
+    description: 'eg: github, local'
+    default: 'github'
   file:
     required: false
     description: 'file path, eg: .github/workflows/file.txt'
+  outkey:
+    required: false
+    description: 'output value key'
+    default: 'value'
+  #
   owner:
     required: false
     description: 'resp owner'
@@ -17,9 +26,6 @@ inputs:
   branch:
     required: false
     description: 'branch'
-  outkey:
-    required: false
-    description: 'output value key'
 #outputs:
 runs:
   using: node16

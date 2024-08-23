@@ -1,5 +1,7 @@
 # action-file-to-env
-将指定文件加载为环境参数，支持 url 地址
+> 将指定文件加载为环境参数，支持 url 地址
+
+例如: 将 https://github.com/hocgin/.github/workflows/file.txt 的内容设置为一个变量 `REMOTE_HOST`
 
 
 ## 如何使用

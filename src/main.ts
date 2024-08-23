@@ -5,6 +5,7 @@ export interface Inputs {
     debug?: boolean;
     file?: string;
     owner?: string;
+    type?: 'github' | 'local';
     repo?: string;
     branch?: string;
     token?: string;
@@ -18,11 +19,14 @@ export interface Outputs {
 
 let getInput = (): Inputs => ({
     debug: core.getInput('debug') === 'true',
+    type: core.getInput('type', {required: false}) as any,
     file: core.getInput('file', {required: false}),
+    outkey: core.getInput('outkey', {required: false}),
+
+    // 可选
     owner: core.getInput('owner', {required: false}),
     repo: core.getInput('repo', {required: false}),
     branch: core.getInput('branch', {required: false}),
-    outkey: core.getInput('outkey', {required: false}),
 })
 
 let handleOutput = (output: Outputs = {}) => {

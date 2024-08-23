@@ -1,6 +1,8 @@
 import {info, warning, getInput} from "@actions/core";
 import * as github from '@actions/github';
 import {Inputs, Outputs} from "./main";
+import path from 'path';
+import fs from 'fs';
 
 
 // @ts-ignore
@@ -35,35 +37,47 @@ async function getBranch(branch: string, repo: string): Promise<string> {
 }
 
 export async function run(input: Inputs): Promise<Outputs> {
-    const crepo = github.context.repo;
     let env = {} as any;
-    let file = input?.file?.trim();
+    let fileContent;
     let outkey = input?.outkey?.trim();
-    file = file?.length ? file : ".github/workflows/file.txt";
     outkey = outkey?.length ? outkey : "value";
+    let file = input?.file?.trim();
+    file = file?.length ? file : ".github/workflows/file.txt";
 
-    let owner: string = input?.owner?.trim() ?? crepo.owner;
-    owner = owner?.length ? owner : crepo.owner;
-
-    let repo = input?.repo?.trim() ?? crepo.repo;
-    repo = repo?.length ? repo : crepo.repo;
-
-    let _branch = input.branch?.trim() ?? github.context.ref;
-    _branch = _branch?.length ? _branch : github.context.ref;
-
-    const branch = await getBranch(_branch, repo);
-
-    info(`${tag("🟡 QUEUE")} read file content`);
-
-    let currentFile = await getFileContents(branch, owner, repo, file);
-    if (currentFile && 'content' in currentFile) {
-        const fileContent = nodeBase64ToUtf8(currentFile.content || '');
-        env[`${outkey}`] = fileContent;
-        if (input?.debug) {
-            console.log('env=', env);
+    if (input?.type === 'local') {
+        let baseDir = process.cwd();
+        const absPath = path.join(baseDir, path.dirname(file), path.basename(file));
+        if (!fs.existsSync(absPath)) {
+            warning(`not found file. absPath = ${absPath}`)
+        }else  {
+            fileContent = fs.readFileSync(absPath).toString();
         }
     }
-    return {
-        ...env
-    };
+    // github resp
+    else {
+        const crepo = github.context.repo;
+
+        let owner: string = input?.owner?.trim() ?? crepo.owner;
+        owner = owner?.length ? owner : crepo.owner;
+
+        let repo = input?.repo?.trim() ?? crepo.repo;
+        repo = repo?.length ? repo : crepo.repo;
+
+        let _branch = input.branch?.trim() ?? github.context.ref;
+        _branch = _branch?.length ? _branch : github.context.ref;
+
+        const branch = await getBranch(_branch, repo);
+
+        info(`${tag("🟡 QUEUE")} read file content`);
+
+        let currentFile = await getFileContents(branch, owner, repo, file);
+        if (currentFile && 'content' in currentFile) {
+            fileContent = nodeBase64ToUtf8(currentFile.content || '');
+        }
+    }
+    env[`${outkey}`] = fileContent;
+    if (input?.debug) {
+        console.log('env=', env);
+    }
+    return {...env};
 }
