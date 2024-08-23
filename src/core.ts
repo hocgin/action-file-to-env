@@ -51,12 +51,12 @@ export async function run(input: Inputs): Promise<Outputs> {
     file = file?.length ? file : ".github/workflows/file.txt";
 
     if (input?.type === 'local') {
-        let baseDir = process.cwd();
+        let baseDir = __dirname;
         const absPath = path.join(baseDir, path.dirname(file), path.basename(file));
         if (!fs.existsSync(absPath)) {
-            warning(`not found file. baseDir = ${baseDir}, absPath = ${absPath}`)
+            warning(`not found file. baseDir = ${baseDir}, absPath = ${absPath}, __dirname = ${__dirname}`)
             info(`baseDir files = ${fs.readdirSync(baseDir)}`);
-            info(`relative files = ${fs.readdirSync(path.relative(".", file))}`);
+            info(`relative files = ${fs.readdirSync(path.relative(__dirname, file))}`);
         }else  {
             fileContent = fs.readFileSync(absPath).toString();
         }
