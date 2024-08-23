@@ -47,6 +47,7 @@ const core_1 = __nccwpck_require__(9483);
 const github = __importStar(__nccwpck_require__(7586));
 const path_1 = __importDefault(__nccwpck_require__(1017));
 const fs_1 = __importDefault(__nccwpck_require__(7147));
+const process = __importStar(__nccwpck_require__(7742));
 // @ts-ignore
 const octokit = (() => {
     let token = process.env.GITHUB_TOKEN;
@@ -98,7 +99,13 @@ function run(input) {
             let baseDir = __dirname;
             const absPath = path_1.default.join(baseDir, path_1.default.dirname(file), path_1.default.basename(file));
             if (!fs_1.default.existsSync(absPath)) {
-                (0, core_1.warning)(`not found file. baseDir = ${baseDir}, absPath = ${absPath}, __dirname = ${__dirname}`);
+                (0, core_1.warning)(`not found file.
+                cwd = ${process.cwd()},
+                baseDir = ${baseDir},
+                absPath = ${absPath},
+                __dirname = ${__dirname}
+                ./file = ${path_1.default.relative('.', file)}
+                `);
                 (0, core_1.info)(`baseDir files = ${fs_1.default.readdirSync(baseDir)}`);
                 (0, core_1.info)(`relative files = ${fs_1.default.readdirSync(path_1.default.relative(__dirname, file))}`);
             }
@@ -32875,6 +32882,14 @@ module.exports = require("net");
 
 "use strict";
 module.exports = require("node:events");
+
+/***/ }),
+
+/***/ 7742:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:process");
 
 /***/ }),
 
