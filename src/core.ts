@@ -3,6 +3,7 @@ import * as github from '@actions/github';
 import {Inputs, Outputs} from "./main";
 import path from 'path';
 import fs from 'fs';
+import * as process from "node:process";
 
 
 // @ts-ignore
@@ -54,7 +55,13 @@ export async function run(input: Inputs): Promise<Outputs> {
         let baseDir = __dirname;
         const absPath = path.join(baseDir, path.dirname(file), path.basename(file));
         if (!fs.existsSync(absPath)) {
-            warning(`not found file. baseDir = ${baseDir}, absPath = ${absPath}, __dirname = ${__dirname}`)
+            warning(`not found file.
+                cwd = ${process.cwd()},
+                baseDir = ${baseDir},
+                absPath = ${absPath},
+                __dirname = ${__dirname}
+                ./file = ${path.relative('.', file)}
+                `)
             info(`baseDir files = ${fs.readdirSync(baseDir)}`);
             info(`relative files = ${fs.readdirSync(path.relative(__dirname, file))}`);
         }else  {
